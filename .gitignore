@@ -1,8 +1,0 @@
-.tox
-__pycache__
-*.py[co]
-*.*~
-.coverage
-*.egg-info
-.cache
-dist
