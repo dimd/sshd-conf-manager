@@ -1,4 +1,4 @@
-.. image:: https://gitlabe1.ext.net.nokia.com/dalianis/conf-manager/badges/master/build.svg
+.. image:: https://gitlabe1.ext.net.nokia.com/utas-security/conf-manager/badges/master/build.svg
 
 Description
 ===========
