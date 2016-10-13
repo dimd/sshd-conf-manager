@@ -6,9 +6,6 @@ Usage:
                       [--redis-section <redis_section]
                       [--sshd-conf-file <sshd_conf_file>]
                       [--process-name <process_name>]
-                      [--supervisor-username <supervisor_username>]
-                      [--supervisor-password <supervisor_password>]
-                      [--supervisor-socket <supervisor_socket>]
 
     sshd-conf-manager (-h | --help)
 
@@ -18,9 +15,6 @@ Options:
     --redis-section <redis_section>              Redis section to subscribe for events [default: sshd]
     --sshd-conf-file <sshd_conf_file>            Path to the sshd configuration file [default: /etc/ssh/sshd_config]
     --process-name <process_name>                Supervisord process name of the sshd instance running [default: sshd]
-    --supervisor-username <supervisor_username>  Supervisor xmlrpc service username [default: dummy]
-    --supervisor-password <supervisor_password>  Supervisor xmlrpc service password [default: dummy]
-    --supervisor-socket <supervisor_socket>      Supervisor xmlrpc service socket [default: /var/run/supervisor/supervisor.sock]
     -h, --help                                   Show this
 """
 
@@ -39,12 +33,6 @@ class SshdConf(SupervisordMixin, SSHConfFileMixin, RedisSubscriber):
         self.redis_section = arguments.get('--redis-section')
         self.conf_file = arguments.get('--sshd-conf-file')
         self.process_name = arguments.get('--process-name')
-        self.supervisor_xmlrpc_username = arguments.get(
-                '--supervisor-username')
-        self.supervisor_xmlrpc_password = arguments.get(
-                '--supervisor-password')
-        self.supervisor_xmlrpc_unix_socket = arguments.get(
-                '--supervisor-socket')
 
         self.redis_callbacks.extend([
                 self.apply_conf,
