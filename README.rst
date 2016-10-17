@@ -19,19 +19,19 @@ Use pip
 
 .. code-block:: Bash
 
- pip install git+https://gitlabe1.ext.net.nokia.com/utas-security/conf-manager.git#egg=conf_manager
+ pip install git+https://gitlabe1.ext.net.nokia.com/utas-security/sshd-conf-manager.git#egg=sshd_conf_manager
 
 or if you have the repository checked out:
 
 .. code-block:: Bash
 
- pip install conf_manager
+ pip install sshd_conf_manager
 
 Hopefully the project will be uploaded to a PyPi server soon. When this is done you will be able to:
 
 .. code-block:: Bash
 
- pip install conf_manager
+ pip install sshd_conf_manager
 
 Usage
 =====
