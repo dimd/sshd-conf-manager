@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 setup(
-    name='conf_manager',
+    name='sshd_conf_manager',
     version='0.2',
     description='Read configuration from Redis and apply it to sshd',
     packages=find_packages(exclude=['tests']),
