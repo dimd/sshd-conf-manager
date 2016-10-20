@@ -2,7 +2,6 @@ import unittest
 
 import mock
 import redis
-# import logging
 
 from conf_manager import redis_subscriber as redis_subscriber_lib
 
@@ -44,7 +43,7 @@ class RedisSubscriberTest(unittest.TestCase):
                 spec=redis.client.PubSub, autospec=True)
         gevent_mock.sleep.side_effect = redis.ConnectionError('error')
 
-        self.redis_subscriber.listen()
+        self.assertRaises(redis.ConnectionError, self.redis_subscriber.listen)
 
         self.redis_subscriber.redis_pub_sub.get_message.assert_called()
         gevent_mock.sleep.assert_called_with(0.1)
@@ -65,6 +64,19 @@ class RedisSubscriberTest(unittest.TestCase):
     def test_start(self, gevent_mock, logging_mock, redis_mock):
         self.redis_subscriber.start()
 
-        logging_mock.getLogger.assert_called()
-        # logging_mock.getLogger.return_value.setLevel.assert_called_with(20)
         gevent_mock.spawn.assert_called_with(self.redis_subscriber.listen)
+        gevent_mock.spawn.return_value.join.assert_called()
+
+    @mock.patch('conf_manager.redis_subscriber.logging', autospec=True)
+    @mock.patch('conf_manager.redis_subscriber.gevent', autospec=True)
+    def test_start_connection_error(
+            self, gevent_mock, logging_mock):
+
+        self.redis_subscriber.set_connection = mock.Mock(
+                side_effect=redis.ConnectionError('error'))
+        self.redis_subscriber.start()
+
+        logging_mock.error.assert_called_with('error')
+        gevent_mock.sleep.assert_called_with(5)
+        gevent_mock.spawn.assert_called_with(self.redis_subscriber.start)
+        gevent_mock.spawn.return_value.join.assert_called()

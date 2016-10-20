@@ -28,7 +28,7 @@ class RedisSubscriber(object):
                 gevent.sleep(0.1)
             except redis.ConnectionError as e:
                 logging.error(e.message)
-                break
+                raise
 
     def set_data(self, event_data=None):
         data = self.redis.hgetall(self.redis_section)
@@ -38,9 +38,12 @@ class RedisSubscriber(object):
                 cb(data)
 
     def start(self):
-        logging.getLogger().setLevel(logging.INFO)
-        self.set_connection()
-        self.set_data()
-        self.subscribe()
-
-        gevent.spawn(self.listen).join()
+        try:
+            self.set_connection()
+            self.set_data()
+            self.subscribe()
+            gevent.spawn(self.listen).join()
+        except redis.ConnectionError as e:
+            logging.error(e.message)
+            gevent.sleep(5)
+            gevent.spawn(self.start).join()
