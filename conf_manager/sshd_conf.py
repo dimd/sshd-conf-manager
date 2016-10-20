@@ -10,12 +10,13 @@ Usage:
     sshd-conf-manager (-h | --help)
 
 Options:
-    --redis-host <redis_host>                    Redis hostname/ip [default: 127.0.0.1]
-    --redis-port <redis_port>                    Redis port [default: 6379]
-    --redis-section <redis_section>              Redis section to subscribe for events [default: sshd]
-    --sshd-conf-file <sshd_conf_file>            Path to the sshd configuration file [default: /etc/ssh/sshd_config]
-    --process-name <process_name>                Supervisord process name of the sshd instance running [default: sshd]
-    -h, --help                                   Show this
+    --redis-host <redis_host>          Redis hostname/ip [default: 127.0.0.1]
+    --redis-port <redis_port>          Redis port [default: 6379]
+    --redis-section <redis_section>    Redis section to subscribe for events [default: sshd]
+    --sshd-conf-file <sshd_conf_file>  Path to the sshd configuration file [default: /etc/ssh/sshd_config]
+    --process-name <process_name>      Supervisord process name of the sshd instance running [default: sshd]
+    --supervisor-server <server_url>   Supervisord server url [default: http://localhost:9001/RPC2]
+    -h, --help                         Show this
 """
 
 from docopt import docopt
@@ -33,6 +34,7 @@ class SshdConf(SupervisordMixin, SSHConfFileMixin, RedisSubscriber):
         self.redis_section = arguments.get('--redis-section')
         self.conf_file = arguments.get('--sshd-conf-file')
         self.process_name = arguments.get('--process-name')
+        self.supervisor_server = arguments.get('--supervisor-server')
 
         self.redis_callbacks.extend([
                 self.apply_conf,

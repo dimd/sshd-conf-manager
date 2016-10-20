@@ -6,13 +6,15 @@ from conf_manager import sshd_conf as sshd_conf_lib
 
 class SshdConfTest(unittest.TestCase):
 
-    def test_SshdConf_initialization(self):
+    @mock.patch('conf_manager.process.xmlrpclib', auto_spec=True)
+    def test_SshdConf_initialization(self, xmlrpclib_mock):
         sshd_conf = sshd_conf_lib.SshdConf({
                 '--redis-host': 'host',
                 '--redis-port': '1',
                 '--redis-section': 'asection',
                 '--sshd-conf-file': 'sshd',
                 '--process-name': 'sshd',
+                '--supervisor-server': 'localhost'
             })
 
         self.assertEqual(sshd_conf.redis_host, 'host')

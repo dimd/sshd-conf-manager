@@ -6,12 +6,10 @@ class SupervisordMixin(object):
     A Mixin that can be used to manipulate supervisord processes
     """
     process_name = None
-    supervisor_xmlrpc_username = None
-    supervisor_xmlrpc_password = None
-    supervisor_xmlrpc_unix_socket = None
+    supervisor_server = None
 
     def __init__(self):
-        self.server = xmlrpclib.Server('http://localhost:9001/RPC2')
+        self.server = xmlrpclib.Server(self.supervisor_server)
 
     def reload_settings(self, data):
         if self.is_process_up():

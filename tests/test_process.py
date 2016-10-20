@@ -5,11 +5,11 @@ from conf_manager.process import SupervisordMixin
 
 
 @mock.patch('conf_manager.process.xmlrpclib', auto_spec=True)
-class ProcessMixiTest(unittest.TestCase):
+class ProcessMixinTest(unittest.TestCase):
     def test_initialization(self, xmlrpclib_mock):
         SupervisordMixin()
 
-        xmlrpclib_mock.Server.assert_called_with('http://localhost:9001/RPC2')
+        xmlrpclib_mock.Server.assert_called_with(None)
 
     def test_reload_settings(self, xmlrpclib_mock):
         supervisord_mixin = SupervisordMixin()
