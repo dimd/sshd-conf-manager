@@ -9,6 +9,7 @@ class RedisSubscriber(object):
     redis_port = None
     redis_section = None
     redis_callbacks = []
+    redis_logger = logging.getLogger('redis')
 
     def set_connection(self, *args, **kwargs):
         self.redis = redis.StrictRedis(host=self.redis_host,
@@ -27,12 +28,13 @@ class RedisSubscriber(object):
                 self.redis_pub_sub.get_message()
                 gevent.sleep(0.1)
             except redis.ConnectionError as e:
-                logging.error(e.message)
+                self.redis_logger.error(e.message)
                 raise
 
     def set_data(self, event_data=None):
         data = self.redis.hgetall(self.redis_section)
-        logging.info('Received redis data: {0}'.format(data))
+        self.redis_logger.info(
+                'Received redis data: {0}'.format(data))
         if data:
             for cb in self.redis_callbacks:
                 cb(data)
@@ -44,6 +46,7 @@ class RedisSubscriber(object):
             self.subscribe()
             gevent.spawn(self.listen).join()
         except redis.ConnectionError as e:
-            logging.error(e.message)
+            self.redis_logger.error(
+                    '{0} Will retry in 5 seconds.'.format(e.message))
             gevent.sleep(5)
             gevent.spawn(self.start).join()
