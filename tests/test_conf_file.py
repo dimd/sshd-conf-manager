@@ -4,7 +4,7 @@ import unittest
 
 import mock
 
-from conf_manager.conf_file import SSHConfFileMixin
+from sshd_conf_manager.conf_file import SSHConfFileMixin
 
 
 class SSHConfFileMixinTest(unittest.TestCase):
@@ -57,7 +57,7 @@ class SSHConfFileMixinTest(unittest.TestCase):
             self.assertItemsEqual(
                     f.readlines(), ['hello goodbye\n', 'penny lane\n'])
 
-    @mock.patch.multiple('conf_manager.conf_file.SSHConfFileMixin',
+    @mock.patch.multiple('sshd_conf_manager.conf_file.SSHConfFileMixin',
                          read_conf=mock.DEFAULT,
                          write_conf=mock.DEFAULT,
                          update_conf=mock.DEFAULT)

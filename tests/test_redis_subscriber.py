@@ -4,7 +4,7 @@ import mock
 import logging
 import redis
 
-from conf_manager import redis_subscriber as redis_subscriber_lib
+from sshd_conf_manager import redis_subscriber as redis_subscriber_lib
 
 
 class RedisSubscriberTest(unittest.TestCase):
@@ -18,7 +18,7 @@ class RedisSubscriberTest(unittest.TestCase):
         self.redis_subscriber.redis_callbacks = [self.my_cb]
         self.redis_subscriber.redis_logger = mock.Mock(spec=logging.Logger)
 
-    @mock.patch('conf_manager.redis_subscriber.redis', autospec=True)
+    @mock.patch('sshd_conf_manager.redis_subscriber.redis', autospec=True)
     def test_set_connection(self, redis_mock):
         self.redis_subscriber.set_connection()
 
@@ -38,7 +38,7 @@ class RedisSubscriberTest(unittest.TestCase):
         pubsub_mock.subscribe.assert_called_with(
                 **{'__keyspace@0__:section': self.redis_subscriber.set_data})
 
-    @mock.patch('conf_manager.redis_subscriber.gevent', autospec=True)
+    @mock.patch('sshd_conf_manager.redis_subscriber.gevent', autospec=True)
     def test_listen(self, gevent_mock):
         self.redis_subscriber.redis_pub_sub = mock.Mock(
                 spec=redis.client.PubSub, autospec=True)
@@ -59,15 +59,15 @@ class RedisSubscriberTest(unittest.TestCase):
         self.redis_subscriber.redis.hgetall.assert_called_with('section')
         self.my_cb.assert_called_with('test')
 
-    @mock.patch('conf_manager.redis_subscriber.redis', autospec=True)
-    @mock.patch('conf_manager.redis_subscriber.gevent', autospec=True)
+    @mock.patch('sshd_conf_manager.redis_subscriber.redis', autospec=True)
+    @mock.patch('sshd_conf_manager.redis_subscriber.gevent', autospec=True)
     def test_start(self, gevent_mock, redis_mock):
         self.redis_subscriber.start()
 
         gevent_mock.spawn.assert_called_with(self.redis_subscriber.listen)
         gevent_mock.spawn.return_value.join.assert_called()
 
-    @mock.patch('conf_manager.redis_subscriber.gevent', autospec=True)
+    @mock.patch('sshd_conf_manager.redis_subscriber.gevent', autospec=True)
     def test_start_connection_error(self, gevent_mock):
 
         self.redis_subscriber.set_connection = mock.Mock(

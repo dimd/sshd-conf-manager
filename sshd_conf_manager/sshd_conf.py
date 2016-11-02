@@ -6,6 +6,7 @@ Usage:
                       [--redis-section <redis_section]
                       [--sshd-conf-file <sshd_conf_file>]
                       [--process-name <process_name>]
+                      [--supervisor-server <server_url>]
 
     sshd-conf-manager (-h | --help)
 
@@ -19,6 +20,8 @@ Options:
     -h, --help                         Show this
 """
 
+import logging.config
+import yaml
 from docopt import docopt
 
 from redis_subscriber import RedisSubscriber
@@ -40,6 +43,9 @@ class SshdConf(SupervisordMixin, SSHConfFileMixin, RedisSubscriber):
                 self.apply_conf,
                 self.reload_settings
         ])
+
+        with open('conf/logging_config.yaml', 'r') as f:
+            logging.config.dictConfig(yaml.load(f))
 
         super(SshdConf, self).__init__()
 

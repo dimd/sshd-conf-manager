@@ -1,10 +1,10 @@
 import mock
 import unittest
 
-from conf_manager.process import SupervisordMixin
+from sshd_conf_manager.process import SupervisordMixin
 
 
-@mock.patch('conf_manager.process.xmlrpclib', auto_spec=True)
+@mock.patch('sshd_conf_manager.process.xmlrpclib', auto_spec=True)
 class ProcessMixinTest(unittest.TestCase):
     def test_initialization(self, xmlrpclib_mock):
         SupervisordMixin()

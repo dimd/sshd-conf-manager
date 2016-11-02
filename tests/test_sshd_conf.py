@@ -1,12 +1,12 @@
 import mock
 import unittest
 
-from conf_manager import sshd_conf as sshd_conf_lib
+from sshd_conf_manager import sshd_conf as sshd_conf_lib
 
 
 class SshdConfTest(unittest.TestCase):
 
-    @mock.patch('conf_manager.process.xmlrpclib', auto_spec=True)
+    @mock.patch('sshd_conf_manager.process.xmlrpclib', auto_spec=True)
     def test_SshdConf_initialization(self, xmlrpclib_mock):
         sshd_conf = sshd_conf_lib.SshdConf({
                 '--redis-host': 'host',
@@ -28,8 +28,8 @@ class SshdConfTest(unittest.TestCase):
                  sshd_conf.reload_settings]
                 )
 
-    @mock.patch('conf_manager.sshd_conf.SshdConf', auto_spec=True)
-    @mock.patch('conf_manager.sshd_conf.docopt', auto_spec=True)
+    @mock.patch('sshd_conf_manager.sshd_conf.SshdConf', auto_spec=True)
+    @mock.patch('sshd_conf_manager.sshd_conf.docopt', auto_spec=True)
     def test_main(self, docopt_mock, sshd_conf_mock):
         sshd_conf_lib.main()
 

@@ -1,5 +1,5 @@
 import unittest
-from conf_manager import utils
+from sshd_conf_manager import utils
 
 
 class UtilsTest(unittest.TestCase):
