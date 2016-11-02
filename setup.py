@@ -8,8 +8,7 @@ with open(path.join(here, 'README.rst'), 'r') as f:
 
 setup(
     name='sshd_conf_manager',
-    use_scm_version=True,
-    setup_requires=['setuptools_scm'],
+    version='0.2.2',
     description='Read configuration from Redis and apply it to sshd',
     long_description=long_description,
     packages=find_packages(include=['sshd_conf_manager']),

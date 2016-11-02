@@ -21,6 +21,7 @@ Options:
 """
 
 import logging.config
+import sys
 import yaml
 from docopt import docopt
 
@@ -44,7 +45,7 @@ class SshdConf(SupervisordMixin, SSHConfFileMixin, RedisSubscriber):
                 self.reload_settings
         ])
 
-        with open('conf/logging_config.yaml', 'r') as f:
+        with open('/'.join([sys.prefix, 'conf', 'logging_config.yaml'])) as f:
             logging.config.dictConfig(yaml.load(f))
 
         super(SshdConf, self).__init__()
