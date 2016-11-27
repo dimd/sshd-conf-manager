@@ -37,7 +37,7 @@ class SSHConfFileMixinTest(unittest.TestCase):
                     ))
 
     def test_update_conf(self):
-        data = {'copy of': 'a', 'destroyer': 'kapput'}
+        data = {'timers': {'copy of': 'a', 'destroyer': 'kapput'}}
 
         self.ssh_conf_file_mixin.update_conf(data)
 
