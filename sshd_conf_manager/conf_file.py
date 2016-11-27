@@ -14,6 +14,7 @@ class SSHConfFileMixin(object):
                 imap(split_on_first_whitespace, cleaned_up_conf(f)))
 
     def update_conf(self, data):
+        data = data.get('timers')
         # Add newline to data dict's values
         data.update({k: '{0}\n'.format(v) for k, v in data.iteritems()})
 

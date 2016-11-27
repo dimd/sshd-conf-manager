@@ -24,7 +24,8 @@ class SshdConfTest(unittest.TestCase):
         self.assertEqual(sshd_conf.process_name, 'sshd')
         self.assertListEqual(
                 sshd_conf.redis_callbacks,
-                [sshd_conf.apply_conf,
+                [sshd_conf.update_banner_file,
+                 sshd_conf.apply_conf,
                  sshd_conf.reload_settings]
                 )
 
