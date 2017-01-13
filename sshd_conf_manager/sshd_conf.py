@@ -7,6 +7,7 @@ Usage:
                       [--sshd-conf-file <sshd_conf_file>]
                       [--process-name <process_name>]
                       [--supervisor-server <server_url>]
+                      [--sshd-banner-file <banner_file>]
 
     sshd-conf-manager (-h | --help)
 
