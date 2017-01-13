@@ -37,13 +37,14 @@ class SSHConfFileMixinTest(unittest.TestCase):
                     ))
 
     def test_update_conf(self):
-        data = {'timers': {'copy of': 'a', 'destroyer': 'kapput'}}
+        data = {'timers.ssh-based-interface-timer': 60,
+                'timers.common-interface-timer': 15}
 
         self.ssh_conf_file_mixin.update_conf(data)
 
         self.assertDictEqual(
                 self.ssh_conf_file_mixin.conf,
-                {'copy of': 'a\n', 'destroyer': 'kapput\n'})
+                {'LoginGraceTime': '60\n', 'ClientAliveInterval': '15\n'})
 
     def test_write_conf(self):
         self.ssh_conf_file_mixin.conf = {
