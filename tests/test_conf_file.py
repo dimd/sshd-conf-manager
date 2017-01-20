@@ -20,7 +20,7 @@ class SSHConfFileMixinTest(unittest.TestCase):
                 ' thaw \n',
                 'jane doe\n',
                 'Match Group converge\n'
-                '  #distance and meaning\n']
+                '  distance and meaning\n']
 
         with temp_file.file as f:
             for line in data:
@@ -33,7 +33,9 @@ class SSHConfFileMixinTest(unittest.TestCase):
             self.assertEqual(
                     self.ssh_conf_file_mixin.conf,
                     collections.OrderedDict(
-                        (('jane', 'doe\n'), ('Match', 'Group converge\n'),)
+                        (('jane', ['doe\n']),
+                         ('Match', ['Group converge\n']),
+                         ('distance', ['and meaning\n']),)
                     ))
 
     def test_update_conf(self):
@@ -44,19 +46,21 @@ class SSHConfFileMixinTest(unittest.TestCase):
 
         self.assertDictEqual(
                 self.ssh_conf_file_mixin.conf,
-                {'LoginGraceTime': '60\n', 'ClientAliveInterval': '15\n'})
+                {'LoginGraceTime': ['60\n'], 'ClientAliveInterval': ['15\n']})
 
     def test_write_conf(self):
         self.ssh_conf_file_mixin.conf = {
-                'hello': 'goodbye\n',
-                'penny': 'lane\n'}
+                'hello': ['goodbye\n'],
+                'penny': ['lane\n']}
         temp_file = tempfile.NamedTemporaryFile()
         self.ssh_conf_file_mixin.conf_file = temp_file.name
 
         with temp_file.file as f:
             self.ssh_conf_file_mixin.write_conf()
             self.assertItemsEqual(
-                    f.readlines(), ['hello goodbye\n', 'penny lane\n'])
+                f.readlines(),
+                ['hello goodbye\n', 'penny lane\n']
+            )
 
     @mock.patch.multiple('sshd_conf_manager.conf_file.SSHConfFileMixin',
                          read_conf=mock.DEFAULT,

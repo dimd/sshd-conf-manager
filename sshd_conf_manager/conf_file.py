@@ -24,20 +24,27 @@ class SSHConfFileMixin(object):
 
     def read_conf(self):
         with open(self.conf_file, 'r') as f:
-            self.conf = OrderedDict(
-                imap(split_on_first_whitespace, cleaned_up_conf(f)))
+            self.conf = OrderedDict()
+            for k, v in imap(split_on_first_whitespace, cleaned_up_conf(f)):
+                try:
+                    self.conf[k].append(v)
+                except KeyError:
+                    self.conf[k] = [v]
 
     def update_conf(self, data):
         data = self.translate_data_to_sshd_conf(data)
         # Add newline to data dict's values
-        data.update({k: '{0}\n'.format(v) for k, v in data.iteritems()})
+        data.update({k: ['{0}\n'.format(v)] for k, v in data.iteritems()})
 
-        self.conf.update(data)
+        # Put updated values on top of the dictionary to not mess with
+        # the Match sections
+        self.conf = OrderedDict(list(data.items()) + list(self.conf.items()))
 
     def write_conf(self):
         with open(self.conf_file, 'w') as f:
-            for key, value in self.conf.iteritems():
-                f.write('{0} {1}'.format(key, value))
+            for key, values in self.conf.iteritems():
+                for value in values:
+                    f.write('{0} {1}'.format(key, value))
 
     def apply_conf(self, data):
         self.read_conf()
