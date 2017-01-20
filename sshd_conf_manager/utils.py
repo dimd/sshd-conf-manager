@@ -7,7 +7,7 @@ def split_on_first_whitespace(line):
 
 
 def cleaned_up_conf(iterable):
-    no_comments_and_empty_lines = re.compile(r' *\w+(?:\s+)\w+')
+    no_comments_and_empty_lines = re.compile(r'[ \t]*[\w/\.]+(?:\s+)[\w/\.]+')
     return ifilter(
             no_comments_and_empty_lines.match,
             iterable)
