@@ -1,6 +1,8 @@
 from os import path
 from setuptools import find_packages, setup
 
+from sshd_conf_manager import __version__
+
 here = path.abspath(path.dirname(__file__))
 
 with open(path.join(here, 'README.rst'), 'r') as f:
@@ -8,7 +10,7 @@ with open(path.join(here, 'README.rst'), 'r') as f:
 
 setup(
     name='sshd_conf_manager',
-    version='0.3.0',
+    version=__version__,
     description='Read configuration from Redis and apply it to sshd',
     long_description=long_description,
     packages=find_packages(include=['sshd_conf_manager']),

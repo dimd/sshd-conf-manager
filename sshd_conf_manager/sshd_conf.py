@@ -11,6 +11,7 @@ Usage:
                       [--listening-interface <listening_interface>]
 
     sshd-conf-manager (-h | --help)
+    sshd-conf-manager (-v | --version)
 
 Options:
     --redis-host <redis_host>                    Redis hostname/ip [default: 127.0.0.1]
@@ -21,7 +22,8 @@ Options:
     --supervisor-server <server_url>             Supervisord server url [default: http://localhost:9001/RPC2]
     --sshd-banner-file <banner_file>             sshd banner file location [default: /etc/ssh/sshd_banner]
     --listening-interface <listening_interface>  Network interface on which sshd listens [default: oam]
-    -h, --help                         Show this
+    -h, --help                                   Show this
+    -v, --version                                Show package version
 """
 
 import logging.config
@@ -29,6 +31,7 @@ import sys
 import yaml
 from docopt import docopt
 
+from . import __version__
 from banner_file import BannerFileMixin
 from redis_subscriber import RedisSubscriber
 from conf_file import SSHConfFileMixin
@@ -63,4 +66,4 @@ class SshdConf(BannerFileMixin,
 
 
 def main():
-    SshdConf(docopt(__doc__)).start()
+    SshdConf(docopt(__doc__, version=__version__)).start()
