@@ -10,7 +10,7 @@ class UtilsTest(unittest.TestCase):
 
         self.assertListEqual(result, ['This', 'is a trick'])
 
-    def test_cleaned_up_conf(self):
+    def test_get_sshd_conf(self):
         test_iterable = [
                 '#Comment will be removed',
                 '\n',
@@ -20,5 +20,5 @@ class UtilsTest(unittest.TestCase):
                 'I will stay']
 
         self.assertItemsEqual(
-                list(utils.cleaned_up_conf(test_iterable)),
+                list(utils.get_sshd_conf(test_iterable)),
                 [' I am in', 'I will stay'])

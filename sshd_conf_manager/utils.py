@@ -1,13 +1,31 @@
+import fcntl
 import re
-from itertools import ifilter
+import socket
+import struct
+
+
+def get_listen_address(ifname):
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        return socket.inet_ntoa(fcntl.ioctl(
+            s.fileno(),
+            0x8915,  # SIOCGIFADDR
+            struct.pack('256s', ifname[:15])
+        )[20:24])
+    except IOError:
+        return '0.0.0.0'
+
+
+def not_match_section(line):
+    return not line.startswith('Match')
 
 
 def split_on_first_whitespace(line):
     return line.split(None, 1)
 
 
-def cleaned_up_conf(iterable):
+def get_sshd_conf(iterable):
     no_comments_and_empty_lines = re.compile(r'[ \t]*[\w/\.]+(?:\s+)[\w/\.]+')
-    return ifilter(
+    return filter(
             no_comments_and_empty_lines.match,
             iterable)

@@ -31,27 +31,39 @@ class SSHConfFileMixinTest(unittest.TestCase):
             self.ssh_conf_file_mixin.read_conf()
 
             self.assertEqual(
-                    self.ssh_conf_file_mixin.conf,
-                    collections.OrderedDict(
-                        (('jane', ['doe\n']),
-                         ('Match', ['Group converge\n']),
-                         ('distance', ['and meaning\n']),)
-                    ))
+                self.ssh_conf_file_mixin.conf.global_settings,
+                {'jane': ['doe\n']}
+            )
+            self.assertEqual(
+                list(self.ssh_conf_file_mixin.conf.match_sections),
+                ['Match Group converge\n',
+                 '  distance and meaning\n']
+            )
 
     def test_update_conf(self):
         data = {'timers.ssh-based-interface-timer': 60,
                 'timers.common-interface-timer': 15}
 
+        self.ssh_conf_file_mixin.conf.global_settings = {}
+
         self.ssh_conf_file_mixin.update_conf(data)
 
         self.assertDictEqual(
-                self.ssh_conf_file_mixin.conf,
-                {'LoginGraceTime': ['60\n'], 'ClientAliveInterval': ['15\n']})
+                self.ssh_conf_file_mixin.conf.global_settings,
+                {'LoginGraceTime': ['60\n'],
+                 'ClientAliveInterval': ['15\n'],
+                 'ListenAddress': ['0.0.0.0\n']
+                 })
 
     def test_write_conf(self):
-        self.ssh_conf_file_mixin.conf = {
+        self.ssh_conf_file_mixin.conf = collections.namedtuple(
+            'ssh_config', 'global_settings, match_sections')
+        self.ssh_conf_file_mixin.conf.global_settings = {
                 'hello': ['goodbye\n'],
-                'penny': ['lane\n']}
+                'penny': ['lane\n']
+            }
+        self.ssh_conf_file_mixin.conf.match_sections = ['1\n', 'a\n']
+
         temp_file = tempfile.NamedTemporaryFile()
         self.ssh_conf_file_mixin.conf_file = temp_file.name
 
@@ -59,7 +71,7 @@ class SSHConfFileMixinTest(unittest.TestCase):
             self.ssh_conf_file_mixin.write_conf()
             self.assertItemsEqual(
                 f.readlines(),
-                ['hello goodbye\n', 'penny lane\n']
+                ['hello goodbye\n', 'penny lane\n', '1\n', 'a\n']
             )
 
     @mock.patch.multiple('sshd_conf_manager.conf_file.SSHConfFileMixin',

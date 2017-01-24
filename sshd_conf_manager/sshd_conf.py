@@ -8,17 +8,19 @@ Usage:
                       [--process-name <process_name>]
                       [--supervisor-server <server_url>]
                       [--sshd-banner-file <banner_file>]
+                      [--listening-interface <listening_interface>]
 
     sshd-conf-manager (-h | --help)
 
 Options:
-    --redis-host <redis_host>          Redis hostname/ip [default: 127.0.0.1]
-    --redis-port <redis_port>          Redis port [default: 6379]
-    --redis-section <redis_section>    Redis section to subscribe for events [default: sshd]
-    --sshd-conf-file <sshd_conf_file>  Path to the sshd configuration file [default: /etc/ssh/sshd_config]
-    --process-name <process_name>      Supervisord process name of the sshd instance running [default: sshd]
-    --supervisor-server <server_url>   Supervisord server url [default: http://localhost:9001/RPC2]
-    --sshd-banner-file <banner_file>   sshd banner file location [default: /etc/ssh/sshd_banner]
+    --redis-host <redis_host>                    Redis hostname/ip [default: 127.0.0.1]
+    --redis-port <redis_port>                    Redis port [default: 6379]
+    --redis-section <redis_section>              Redis section to subscribe for events [default: sshd]
+    --sshd-conf-file <sshd_conf_file>            Path to the sshd configuration file [default: /etc/ssh/sshd_config]
+    --process-name <process_name>                Supervisord process name of the sshd instance running [default: sshd]
+    --supervisor-server <server_url>             Supervisord server url [default: http://localhost:9001/RPC2]
+    --sshd-banner-file <banner_file>             sshd banner file location [default: /etc/ssh/sshd_banner]
+    --listening-interface <listening_interface>  Network interface on which sshd listens [default: oam]
     -h, --help                         Show this
 """
 
@@ -46,6 +48,7 @@ class SshdConf(BannerFileMixin,
         self.process_name = arguments.get('--process-name')
         self.supervisor_server = arguments.get('--supervisor-server')
         self.banner_file = arguments.get('--sshd-banner-file')
+        self.listening_interface = arguments.get('--listening-interface')
 
         self.redis_callbacks.extend([
                 self.update_banner_file,
