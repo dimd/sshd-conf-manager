@@ -14,6 +14,8 @@ class SupervisordMixin(object):
     def reload_settings(self, data):
         if self.is_process_up():
             self.server.supervisor.signalProcess(self.process_name, 'HUP')
+        else:
+            self.server.supervisor.startProcess(self.process_name)
 
     def is_process_up(self):
         return self.server.supervisor.getProcessInfo(
