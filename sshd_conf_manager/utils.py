@@ -3,6 +3,8 @@ import re
 import socket
 import struct
 
+from collections import defaultdict, OrderedDict
+
 
 def get_listen_address(ifname):
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -29,3 +31,10 @@ def get_sshd_conf(iterable):
     return filter(
             no_comments_and_empty_lines.match,
             iterable)
+
+
+class OrderedDefaultDict(OrderedDict, defaultdict):
+    # http://stackoverflow.com/a/35968897/7515745
+    def __init__(self, default_factory=None, *args, **kwargs):
+        super(OrderedDefaultDict, self).__init__(*args, **kwargs)
+        self.default_factory = default_factory

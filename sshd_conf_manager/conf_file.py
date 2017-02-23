@@ -1,7 +1,8 @@
-from collections import defaultdict, namedtuple
+from collections import namedtuple
 from itertools import dropwhile, takewhile
 
-from utils import (get_listen_address,
+from utils import (OrderedDefaultDict,
+                   get_listen_address,
                    get_sshd_conf,
                    not_match_section,
                    split_on_first_whitespace)
@@ -41,7 +42,7 @@ class SSHConfFileMixin(object):
         return translated_data
 
     def read_conf(self):
-        self.conf.global_settings = defaultdict(list)
+        self.conf.global_settings = OrderedDefaultDict(list)
 
         with open(self.conf_file, 'r') as f:
             sshd_config_raw = get_sshd_conf(list(f))
