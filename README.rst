@@ -1,3 +1,5 @@
+.. image:: https://travis-ci.org/dimd/sshd-conf-manager.svg?branch=master
+    :target: https://travis-ci.org/dimd/sshd-conf-manager
 Description
 ===========
 
